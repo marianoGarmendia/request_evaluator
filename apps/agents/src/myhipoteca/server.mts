@@ -3,6 +3,8 @@ import cors from "cors";
 import { config } from "dotenv";
 import { HumanMessage } from "@langchain/core/messages";
 import { leadQualifierChain } from "./evaluator.mjs";
+import { conclusionChain } from "./conclusion.mjs"; 
+import { conclusionChainParaCliente } from "./conclusionCliente.mjs";
 
 config();
 
@@ -73,15 +75,27 @@ function normalizeSolicitudDates(input: any): Solicitud {
 
 app.post("/evaluar", async (req, res) => {
   try {
-    const solicitud = normalizeSolicitudDates(req.body);
+    // const solicitud = normalizeSolicitudDates(req.body);
+console.log(req.body);
+    const solicitud = JSON.stringify(req.body);
 
     const contenido = `Evalúa la siguiente solicitud de hipoteca. Devuelve JSON con el formato del evaluador.\nSolicitud:\n${JSON.stringify(solicitud)}`;
 
-    const resultado = await leadQualifierChain.invoke({
+    const resultadoParaBanco = await leadQualifierChain.invoke({
       messages: [new HumanMessage(contenido)],
     });
 
-    return res.status(200).json(resultado);
+    const conclusionTipoInforme = await conclusionChain.invoke({
+      messages: [new HumanMessage(`${JSON.stringify(contenido)} \n\n ${JSON.stringify(resultadoParaBanco)}`)],
+    });
+
+    const conclusionParaCliente = await conclusionChainParaCliente.invoke({
+      messages: [new HumanMessage(`${JSON.stringify(resultadoParaBanco)} \n\n ${JSON.stringify(conclusionTipoInforme)}  \n\n ${JSON.stringify(solicitud)}`)],
+    });
+
+
+
+    return res.status(200).json({resultadoParaBanco, conclusionTipoInforme , conclusionParaCliente});
   } catch (err: any) {
     return res.status(500).json({ error: err?.message || "Error interno" });
   }
