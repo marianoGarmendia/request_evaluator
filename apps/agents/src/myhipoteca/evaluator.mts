@@ -7,62 +7,62 @@ import {MortgageEvaluationSchema} from "./schemaBanco.mjs";
 // Esquema de respuesta del evaluador
 const EvaluacionHipotecaSchema = z.object({
   // Puntaje general
-  score: z.number().min(0).max(1).describe("Puntaje de calificación del lead del 0 al 1"),
+  score: z.number().min(0).max(1).describe("Puntaje de calificación del lead del 0 al 1").nullable(),
   
   // Clasificación categórica
-  clasificacion: z.enum(['DESFAVORABLE', 'DESFAVORABLE_CON_SALVEDADES', 'FAVORABLE_CON_SALVEDADES', 'FAVORABLE'])
-    .describe("Clasificación categórica del solicitante"),
+  clasificacion: z.enum(['DESFAVORABLE', 'DESFAVORABLE_CON_SALVEDADES', 'FAVORABLE_CON_SALVEDADES', 'FAVORABLE']).nullable()
+    .describe("Clasificación categórica del solicitante").nullable(),
   
   // Análisis detallado por áreas
   analisis_detallado: z.object({
     capacidad_endeudamiento: z.object({
-      ratio_cuota_ingresos: z.number().describe("Porcentaje de ingresos que representaría la cuota hipotecaria"),
-      ingresos_mensuales_netos: z.number().describe("Ingresos mensuales netos totales de los titulares"),
-      cuota_estimada_mensual: z.number().describe("Cuota mensual estimada de la hipoteca"),
-      evaluacion: z.string().describe("Evaluación textual de la capacidad de endeudamiento")
-    }),
+      ratio_cuota_ingresos: z.number().describe("Porcentaje de ingresos que representaría la cuota hipotecaria").nullable(),
+      ingresos_mensuales_netos: z.number().describe("Ingresos mensuales netos totales de los titulares").nullable(),
+      cuota_estimada_mensual: z.number().describe("Cuota mensual estimada de la hipoteca").nullable(),
+      evaluacion: z.string().describe("Evaluación textual de la capacidad de endeudamiento").nullable()
+    }).nullable(),
     
     estabilidad_laboral: z.object({
-      puntuacion: z.number().min(0).max(1).describe("Puntuación de estabilidad laboral (0-1)"),
-      factores_positivos: z.array(z.string()).describe("Aspectos laborales favorables"),
-      factores_negativos: z.array(z.string()).describe("Aspectos laborales desfavorables"),
-      evaluacion: z.string().describe("Evaluación textual de la estabilidad laboral")
-    }),
+      puntuacion: z.number().min(0).max(1).describe("Puntuación de estabilidad laboral (0-1)").nullable(),
+      factores_positivos: z.array(z.string()).describe("Aspectos laborales favorables").nullable(),
+      factores_negativos: z.array(z.string()).describe("Aspectos laborales desfavorables").nullable(),
+      evaluacion: z.string().describe("Evaluación textual de la estabilidad laboral").nullable()
+    }).nullable(),
     
     perfil_financiero: z.object({
-      puntuacion: z.number().min(0).max(1).describe("Puntuación del perfil financiero (0-1)"),
-      deudas_existentes: z.number().describe("Total de cuotas mensuales por deudas existentes"),
-      ratio_deuda_ingresos: z.number().describe("Porcentaje de ingresos comprometido en deudas actuales"),
-      ahorro_disponible: z.number().describe("Ahorro disponible del solicitante"),
-      evaluacion: z.string().describe("Evaluación textual del perfil financiero")
-    }),
+      puntuacion: z.number().min(0).max(1).describe("Puntuación del perfil financiero (0-1)").nullable(),
+      deudas_existentes: z.number().describe("Total de cuotas mensuales por deudas existentes").nullable(),
+      ratio_deuda_ingresos: z.number().describe("Porcentaje de ingresos comprometido en deudas actuales").nullable(),
+      ahorro_disponible: z.number().describe("Ahorro disponible del solicitante").nullable(),
+      evaluacion: z.string().describe("Evaluación textual del perfil financiero").nullable()
+    }).nullable() ,
     
     garantias_y_patrimonio: z.object({
-      puntuacion: z.number().min(0).max(1).describe("Puntuación de garantías y patrimonio (0-1)"),
-      valor_garantias: z.number().describe("Valor total de las garantías ofrecidas"),
-      ltv_ratio: z.number().describe("Loan-to-Value ratio (préstamo/valor inmueble)"),
-      evaluacion: z.string().describe("Evaluación textual de garantías y patrimonio")
-    })
+      puntuacion: z.number().min(0).max(1).describe("Puntuación de garantías y patrimonio (0-1)").nullable(),
+      valor_garantias: z.number().describe("Valor total de las garantías ofrecidas").nullable(),
+      ltv_ratio: z.number().describe("Loan-to-Value ratio (préstamo/valor inmueble)").nullable(),
+      evaluacion: z.string().describe("Evaluación textual de garantías y patrimonio").nullable()
+    }).nullable()
   }),
   
   // Factores de riesgo identificados
-  factores_riesgo: z.array(z.string()).describe("Lista de factores de riesgo identificados"),
+  factores_riesgo: z.array(z.string()).describe("Lista de factores de riesgo identificados").nullable(),
   
   // Fortalezas identificadas
-  fortalezas: z.array(z.string()).describe("Lista de fortalezas del perfil del solicitante"),
+  fortalezas: z.array(z.string()).describe("Lista de fortalezas del perfil del solicitante").nullable(),
   
   // Recomendaciones específicas
-  recomendaciones_especificas: z.array(z.string()).describe("Recomendaciones específicas para mejorar el perfil o consideraciones para el broker"),
+  recomendaciones_especificas: z.array(z.string()).describe("Recomendaciones específicas para mejorar el perfil o consideraciones para el broker").nullable(),
   
-  informe_de_conclusion: z.string().describe("informe de tipo de la evaluación, detallada, sin detallar los puntos, solo el resumen, en estilo de noticia"),
+  informe_de_conclusion: z.string().describe("informe de tipo de la evaluación, detallada, sin detallar los puntos, solo el resumen, en estilo de noticia").nullable(),
   
   // Recomendación final
-  recomendacion_final: z.string().describe("Recomendación integral y fundamentada sobre la viabilidad de la hipoteca"),
+  recomendacion_final: z.string().describe("Recomendación integral y fundamentada sobre la viabilidad de la hipoteca").nullable(),
 
-  informe_para_el_cliente: z.string().describe("informe para el cliente, siendo amable, explicando los puntos de evaluación, donde se le comunica el resultado de evaluacion, y se le da una recomendación, que se destaque la cercania hacia el cliente"),
+  informe_para_el_cliente: z.string().describe("informe para el cliente, siendo amable, explicando los puntos de evaluación, donde se le comunica el resultado de evaluacion, y se le da una recomendación, que se destaque la cercania hacia el cliente").nullable(),
   
   // Disclaimer
-  disclaimer: z.string().describe("Texto estándar aclarando las limitaciones de la evaluación automatizada")
+  disclaimer: z.string().describe("Texto estándar aclarando las limitaciones de la evaluación automatizada").nullable()
 });
 
 

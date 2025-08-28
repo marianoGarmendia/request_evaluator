@@ -45,10 +45,10 @@ const model = new ChatOpenAI({
   temperature: 0,
   })
 
-const conclusionSchema = z.object({
-    informe_de_conclusion: z.string().describe("informe de tipo de la evaluación, detallada, marcando los puntos claves que necesita el banco para tomar una decisión"),
+const   conclusionSchema = z.object({
+    informe_de_conclusion: z.string().describe("informe de tipo de la evaluación, detallada, marcando los puntos claves que necesita el banco para tomar una decisión").nullable(),
  
-    disclaimer: z.string().describe("Texto estándar aclarando las limitaciones de la evaluación automatizada")
+    disclaimer: z.string().describe("Texto estándar aclarando las limitaciones de la evaluación automatizada").nullable()
 });
 
 // Template del prompt
